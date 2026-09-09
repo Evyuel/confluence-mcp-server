@@ -1,2 +1,21 @@
 server:
   port: ${APP_PORT:8080}
+
+spring:
+  ai:
+    mcp:
+      server:
+        name: confluence-mcp-server
+        version: 0.1.0
+
+confluence:
+  base-url: ${CONFLUENCE_BASE_URL:https://confluence.company.ru}
+  token: ${CONFLUENCE_TOKEN:}
+  connect-timeout: 5s
+  read-timeout: 30s
+  read:
+    default-max-chars: 20000
+    max-chars: 50000
+  write:
+    parent-page-id: ${CONFLUENCE_PARENT_PAGE_ID:}
+    max-content-size: 1MB
