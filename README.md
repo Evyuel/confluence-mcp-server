@@ -1,6 +1,6 @@
 # Confluence Data Center MCP Server
 
-Безопасный MCP-сервер на Spring Boot для ограниченной работы LLM с Confluence Data Center от имени пользователя. Все REST-запросы используют Personal Access Token (PAT) текущего пользователя; токен не является параметром MCP tools, не возвращается в ответах и не должен логироваться.
+Безопасный MCP-сервер на Spring Boot для ограниченной работы LLM с Confluence Data Center от имени пользователя. Все REST-запросы используют Personal Access Token (PAT) текущего пользователя.
 
 ## Возможности
 
@@ -16,11 +16,11 @@
 | `list_page_attachments` | Только metadata вложений. |
 | `create_page` | Создание опубликованной страницы непосредственно под настроенным parent. |
 
-Произвольные CQL, REST URL, статусы и рекурсивная выгрузка дерева не экспонируются.
+Произвольные CQL, REST URL, статусы и рекурсивная выгрузка дерева не допускаются и не реализованы.
 
 ## Требования и запуск
 
-- Java 17;
+- Java 21;
 - доступ по сети к Confluence Data Center;
 - PAT с нужными правами чтения и создания страницы под разрешённым parent.
 
@@ -30,12 +30,6 @@
 CONFLUENCE_BASE_URL=https://confluence.company.ru
 CONFLUENCE_TOKEN=replace-with-your-personal-access-token
 CONFLUENCE_PARENT_PAGE_ID=123456789
-```
-
-Не сохраняйте реальный PAT в Git или `application.yml`. Запуск:
-
-```bash
-./gradlew bootRun
 ```
 
 ## Конфигурация
@@ -100,11 +94,3 @@ LLM не может передать parent или Space. Перед каждо�
 - idempotency keys и автоматическое восстановление неопределённого POST.
 
 Для read tools ответы Confluence 403 и 404 нормализуются в одинаковые безопасные сообщения, чтобы не раскрывать существование закрытого ресурса.
-
-## Тесты
-
-```bash
-./gradlew clean test
-```
-
-Unit tests покрывают CQL escaping и pagination, Markdown/STORAGE и chunk consistency, macros и graceful degradation, навигацию, Spaces, attachment metadata, фиксированный parent/Space для write, UTF-8 size limit, duplicate-title retry/safety limit, diagnostics и отсутствие повторного POST при неопределённом результате.
